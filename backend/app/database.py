@@ -6,6 +6,7 @@ Provides access to the two hazard collections:
 2. ``precipitation`` (stores historical daily precipitation records and calculations for drought)
 """
 
+import urllib.parse
 from pymongo import MongoClient
 from pymongo.collection import Collection
 from pymongo.database import Database
@@ -16,11 +17,33 @@ _client: MongoClient | None = None
 _db: Database | None = None
 
 
+def sanitize_mongo_uri(uri: str) -> str:
+    """
+    Ensure username and password in MongoDB URI are properly escaped
+    according to RFC 3986 using urllib.parse.quote_plus to avoid InvalidURI errors.
+    """
+    if not uri or "://" not in uri or "@" not in uri:
+        return uri
+    try:
+        prefix, rest = uri.split("://", 1)
+        creds, host_and_query = rest.rsplit("@", 1)
+        if ":" in creds:
+            user, pwd = creds.split(":", 1)
+            # unquote first to prevent double-encoding, then quote_plus
+            safe_user = urllib.parse.quote_plus(urllib.parse.unquote_plus(user))
+            safe_pwd = urllib.parse.quote_plus(urllib.parse.unquote_plus(pwd))
+            return f"{prefix}://{safe_user}:{safe_pwd}@{host_and_query}"
+    except Exception:
+        pass
+    return uri
+
+
 def get_client() -> MongoClient:
     """Return the module-level MongoClient, creating it on first call."""
     global _client
     if _client is None:
-        _client = MongoClient(settings.mongo_uri, serverSelectionTimeoutMS=5000)
+        clean_uri = sanitize_mongo_uri(settings.mongo_uri)
+        _client = MongoClient(clean_uri, serverSelectionTimeoutMS=5000)
     return _client
 
 

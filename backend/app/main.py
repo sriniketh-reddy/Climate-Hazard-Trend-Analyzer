@@ -22,14 +22,23 @@ from app.routers.analysis import router as analysis_router
 from app.seed import seed_database_if_empty
 
 
+async def _safe_seed_background():
+    try:
+        await seed_database_if_empty(force=False)
+    except Exception as exc:
+        import logging
+        logging.getLogger("uvicorn.error").warning(
+            f"Background DB seeding skipped or deferred: {exc}"
+        )
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan — startup / shutdown hooks."""
     # ── Startup ─────────────────────────────────────────────────────────
     try:
         ensure_indexes()
-        # Check collections and seed initial data if empty in background
-        asyncio.create_task(seed_database_if_empty(force=False))
+        asyncio.create_task(_safe_seed_background())
     except Exception as exc:
         import logging
         logging.getLogger("uvicorn.error").warning(
@@ -65,6 +74,12 @@ app.add_middleware(
 
 # ── Routers ─────────────────────────────────────────────────────────────
 app.include_router(analysis_router)
+
+
+@app.get("/")
+@app.head("/")
+async def root():
+    return {"status": "ok", "service": "Climate Hazard Trend Analyzer API"}
 
 
 @app.get("/health")
