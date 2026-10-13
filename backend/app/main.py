@@ -26,12 +26,21 @@ from app.seed import seed_database_if_empty
 async def lifespan(app: FastAPI):
     """Application lifespan — startup / shutdown hooks."""
     # ── Startup ─────────────────────────────────────────────────────────
-    ensure_indexes()
-    # Check collections and seed initial data if empty in background
-    asyncio.create_task(seed_database_if_empty(force=False))
+    try:
+        ensure_indexes()
+        # Check collections and seed initial data if empty in background
+        asyncio.create_task(seed_database_if_empty(force=False))
+    except Exception as exc:
+        import logging
+        logging.getLogger("uvicorn.error").warning(
+            f"MongoDB connection deferred on startup: {exc}. Server will start normally."
+        )
     yield
     # ── Shutdown ────────────────────────────────────────────────────────
-    close_client()
+    try:
+        close_client()
+    except Exception:
+        pass
 
 
 app = FastAPI(

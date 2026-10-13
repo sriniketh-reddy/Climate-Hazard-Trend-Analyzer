@@ -20,7 +20,7 @@ def get_client() -> MongoClient:
     """Return the module-level MongoClient, creating it on first call."""
     global _client
     if _client is None:
-        _client = MongoClient(settings.mongo_uri)
+        _client = MongoClient(settings.mongo_uri, serverSelectionTimeoutMS=5000)
     return _client
 
 
@@ -53,21 +53,26 @@ def get_collection_for_hazard(hazard_type: str) -> Collection:
 
 def ensure_collections_and_indexes() -> None:
     """Ensure both hazard collections exist in MongoDB and have unique indexes."""
-    db = get_database()
-    existing_collections = db.list_collection_names()
+    import logging
+    log = logging.getLogger("database")
+    try:
+        db = get_database()
+        existing_collections = db.list_collection_names()
 
-    # Drop legacy collection if present
-    if "hazard_analysis" in existing_collections:
-        db.drop_collection("hazard_analysis")
+        # Drop legacy collection if present
+        if "hazard_analysis" in existing_collections:
+            db.drop_collection("hazard_analysis")
 
-    # Explicitly create collections if they don't exist
-    for col_name in ("max_temperature", "precipitation"):
-        if col_name not in existing_collections:
-            db.create_collection(col_name)
+        # Explicitly create collections if they don't exist
+        for col_name in ("max_temperature", "precipitation"):
+            if col_name not in existing_collections:
+                db.create_collection(col_name)
 
-    # Ensure unique compound / location_key index
-    for col in (get_max_temperature_collection(), get_precipitation_collection()):
-        col.create_index([("location_key", 1)], unique=True, name="location_key_unique")
+        # Ensure unique compound / location_key index
+        for col in (get_max_temperature_collection(), get_precipitation_collection()):
+            col.create_index([("location_key", 1)], unique=True, name="location_key_unique")
+    except Exception as exc:
+        log.warning(f"Could not connect to MongoDB or ensure collections/indexes: {exc}. Startup continuing.")
 
 
 def ensure_indexes() -> None:
