@@ -1,17 +1,36 @@
 import type { AnalysisRequest, AnalysisResponse } from '../types/analysis';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL
-  ? `${import.meta.env.VITE_API_BASE_URL}/api`
-  : '/api';
+// Trim any trailing slashes from the backend URL
+const rawBase = (import.meta.env.VITE_API_BASE_URL as string | undefined)?.trim() || '';
+const cleanBase = rawBase.replace(/\/+$/, '');
+const API_BASE = cleanBase ? `${cleanBase}/api` : '/api';
 
 export async function fetchAnalysis(request: AnalysisRequest): Promise<AnalysisResponse> {
-  const response = await fetch(`${API_BASE}/analysis`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(request),
-  });
+  let response: Response;
+  const targetUrl = `${API_BASE}/analysis`;
+
+  try {
+    response = await fetch(targetUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(request),
+    });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    if (errorMsg === 'Failed to fetch' || (err instanceof TypeError && err.message.includes('fetch'))) {
+      if (!cleanBase && typeof window !== 'undefined' && window.location.hostname !== 'localhost') {
+        throw new Error(
+          'Missing Backend URL: VITE_API_BASE_URL is not configured in Vercel. Add your Render URL to Environment Variables in Vercel and redeploy.'
+        );
+      }
+      throw new Error(
+        'Cannot reach backend server. If using Render free-tier, the server may be waking up from sleep (~40s) or check your connection.'
+      );
+    }
+    throw err;
+  }
 
   if (!response.ok) {
     let errorDetail = `Server error (${response.status})`;
@@ -21,11 +40,10 @@ export async function fetchAnalysis(request: AnalysisRequest): Promise<AnalysisR
         if (typeof errorJson.detail === 'string') {
           errorDetail = errorJson.detail;
         } else if (Array.isArray(errorJson.detail)) {
-          errorDetail = errorJson.detail.map((err: { msg?: string }) => err.msg || JSON.stringify(err)).join(', ');
+          errorDetail = errorJson.detail.map((e: { msg?: string }) => e.msg || JSON.stringify(e)).join(', ');
         }
       }
     } catch {
-      // Fallback to text
       const errorText = await response.text();
       if (errorText) errorDetail = errorText;
     }
@@ -34,3 +52,4 @@ export async function fetchAnalysis(request: AnalysisRequest): Promise<AnalysisR
 
   return response.json();
 }
+
