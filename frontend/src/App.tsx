@@ -254,6 +254,26 @@ export default function App() {
           rateLimitCooldown={rateLimitCooldown}
           hasData={Boolean(data)}
         />
+
+        {/* Floating Map Overlay anchored directly under Configuration Bar inside sticky container */}
+        <div className="relative w-full mx-auto px-4 sm:px-8 pointer-events-none">
+          <div
+            ref={mapOverlayRef}
+            className={`absolute top-2 left-4 sm:left-8 z-50 w-[calc(100%-2rem)] sm:w-[540px] transition-all duration-300 ease-in-out origin-top-left ${
+              isMapOpen
+                ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto visible shadow-2xl'
+                : 'opacity-0 -translate-y-3 scale-95 pointer-events-none invisible'
+            }`}
+          >
+            <InteractiveMapTray
+              isOpen={isMapOpen}
+              coordinates={coordinates}
+              onChange={handleCoordinatesChange}
+              onClose={() => setIsMapOpen(false)}
+              gridCell={data?.location.grid_cell}
+            />
+          </div>
+        </div>
       </div>
 
       {/* Click-away Scrim for Map Overlay */}
@@ -264,26 +284,6 @@ export default function App() {
           aria-hidden="true"
         />
       )}
-
-      {/* Floating Map Overlay attached directly under Configuration Bar */}
-      <div className="relative w-full mx-auto px-4 sm:px-8">
-        <div
-          ref={mapOverlayRef}
-          className={`absolute top-2 left-4 sm:left-8 z-50 w-[calc(100%-2rem)] sm:w-[540px] transition-all duration-300 ease-in-out origin-top-left ${
-            isMapOpen
-              ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto visible shadow-2xl'
-              : 'opacity-0 -translate-y-3 scale-95 pointer-events-none invisible'
-          }`}
-        >
-          <InteractiveMapTray
-            isOpen={isMapOpen}
-            coordinates={coordinates}
-            onChange={handleCoordinatesChange}
-            onClose={() => setIsMapOpen(false)}
-            gridCell={data?.location.grid_cell}
-          />
-        </div>
-      </div>
 
       {/* 3. Main Workspace Canvas (Full Width & Height Analysis Section) */}
       <main className="flex-1 min-h-0 w-full px-4 sm:px-6 lg:px-8 py-3.5 sm:py-4 relative z-10 flex flex-col">

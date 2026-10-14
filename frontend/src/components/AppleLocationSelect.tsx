@@ -81,7 +81,7 @@ export const AppleLocationSelect: React.FC<AppleLocationSelectProps> = ({
 
       {/* Apple Frosted Popover Menu with Smooth Ease In / Ease Out Animation */}
       <div
-        className={`absolute left-0 top-full mt-2 w-72 apple-glass-popover rounded-3xl p-2.5 z-50 origin-top-left transition-all duration-300 ease-in-out ${
+        className={`absolute left-0 top-full mt-2 w-72 apple-glass-popover bg-[#18181b] border border-white/15 rounded-3xl p-2.5 z-50 origin-top-left shadow-[0_24px_70px_rgba(0,0,0,0.98)] transition-all duration-300 ease-in-out ${
           isOpen
             ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto visible'
             : 'opacity-0 -translate-y-2 scale-95 pointer-events-none invisible'

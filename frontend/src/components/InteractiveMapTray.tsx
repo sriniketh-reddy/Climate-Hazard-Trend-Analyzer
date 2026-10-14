@@ -152,7 +152,7 @@ export const InteractiveMapTray: React.FC<InteractiveMapTrayProps> = ({
   };
 
   return (
-    <div className="apple-glass-popover rounded-3xl p-4 sm:p-5 shadow-[0_24px_64px_rgba(0,0,0,0.8)] space-y-3.5">
+    <div className="apple-glass-popover bg-[#18181b] border border-white/15 rounded-3xl p-4 sm:p-5 shadow-[0_24px_70px_rgba(0,0,0,0.98)] space-y-3.5">
       {/* Map Tray Top Header */}
       <div className="flex items-center justify-between gap-2 pb-3 border-b border-white/[0.08]">
         <div className="flex items-center gap-3">
