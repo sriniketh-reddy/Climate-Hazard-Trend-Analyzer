@@ -284,13 +284,14 @@ Source: Historical Weather Records`;
         </div>
 
         {/* Dynamic Icon */}
-        <div className="w-22 h-22 rounded-3xl bg-gradient-to-b from-[#1c1c1e] to-[#141416] border border-white/15 flex items-center justify-center text-[#2997ff] shadow-[0_16px_40px_rgba(0,113,227,0.25)] relative transition-all duration-300">
+        <div className="w-20 h-20 sm:w-22 sm:h-22 rounded-3xl bg-gradient-to-b from-[#1c1c1e] to-[#141416] border border-white/15 flex items-center justify-center text-[#2997ff] shadow-[0_16px_40px_rgba(0,113,227,0.25)] relative transition-all duration-300">
           {isDrought ? (
-            <Droplets className="w-10 h-10 animate-pulse text-[#2997ff]" />
+            <Droplets className="w-9 h-9 sm:w-10 sm:h-10 animate-pulse text-[#2997ff]" />
           ) : (
-            <Flame className="w-10 h-10 animate-pulse text-[#2997ff]" />
+            <Flame className="w-9 h-9 sm:w-10 sm:h-10 animate-pulse text-[#2997ff]" />
           )}
-          <div className="absolute inset-0 rounded-3xl border border-[#2997ff]/30 animate-ping opacity-15 pointer-events-none" />
+          <div className="absolute inset-0 rounded-3xl bg-[#0071e3]/20 blur-xl animate-pulse pointer-events-none" />
+          <div className="absolute inset-0 rounded-3xl border border-[#2997ff]/30 pointer-events-none" />
         </div>
 
         {/* Headline & Description (Simple, crystal clear) */}

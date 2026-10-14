@@ -68,11 +68,11 @@
 }
 
 .apple-glass-popover {
-  background: rgba(22, 22, 24, 0.76) !important;
+  background: rgba(18, 18, 22, 0.96) !important;
   backdrop-filter: blur(40px) saturate(200%) !important;
   -webkit-backdrop-filter: blur(40px) saturate(200%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.14) !important;
-  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(255, 255, 255, 0.16) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
 }
 
 .apple-glass-nav {
@@ -164,10 +164,10 @@
 
 @keyframes beam-glow-pulse {
   0%, 100% {
-    opacity: 0.65;
+    opacity: 0.6;
   }
   50% {
-    opacity: 0.95;
+    opacity: 0.9;
   }
 }
 
@@ -194,44 +194,39 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 450%;
-  height: 450%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
   animation: beam-rotate 2.8s linear infinite;
   background: conic-gradient(
     from 0deg at 50% 50%,
     transparent 0deg,
-    transparent 170deg,
-    rgba(0, 113, 227, 0.12) 210deg,
-    rgba(41, 151, 255, 0.5) 260deg,
-    rgba(0, 195, 255, 0.85) 310deg,
-    #ffffff 345deg,
-    rgba(0, 195, 255, 0.85) 354deg,
+    transparent 180deg,
+    rgba(0, 113, 227, 0.25) 230deg,
+    rgba(41, 151, 255, 0.65) 280deg,
+    rgba(255, 255, 255, 0.95) 335deg,
+    rgba(41, 151, 255, 0.75) 350deg,
     transparent 360deg
   );
   transform-origin: center center;
+  will-change: transform;
 }
 
 .circling-beam-ambient {
   position: absolute;
-  inset: -4px;
+  inset: -3px;
   border-radius: 9999px;
-  overflow: hidden;
   pointer-events: none;
-  filter: blur(10px);
+  filter: blur(8px);
   z-index: 0;
+  background: radial-gradient(ellipse at center, rgba(0, 113, 227, 0.5) 0%, rgba(41, 151, 255, 0.25) 55%, transparent 75%);
   animation: beam-glow-pulse 2.2s ease-in-out infinite;
   transition: opacity 0.3s ease;
 }
 
-.circling-beam-ambient .circling-beam-spinner {
-  width: 450%;
-  height: 450%;
-  animation: beam-rotate 2.8s linear infinite;
-}
-
 .circling-beam-wrapper:hover .circling-beam-ambient {
   opacity: 1;
-  filter: blur(14px);
+  filter: blur(12px);
 }
 
 .apple-btn-secondary {

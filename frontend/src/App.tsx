@@ -256,11 +256,20 @@ export default function App() {
         />
       </div>
 
+      {/* Click-away Scrim for Map Overlay */}
+      {isMapOpen && (
+        <div
+          className="fixed inset-0 z-40 transition-opacity duration-200"
+          onClick={() => setIsMapOpen(false)}
+          aria-hidden="true"
+        />
+      )}
+
       {/* Floating Map Overlay attached directly under Configuration Bar */}
       <div className="relative w-full mx-auto px-4 sm:px-8">
         <div
           ref={mapOverlayRef}
-          className={`absolute top-2 left-4 sm:left-8 z-40 w-[calc(100%-2rem)] sm:w-[540px] transition-all duration-300 ease-in-out origin-top-left ${
+          className={`absolute top-2 left-4 sm:left-8 z-50 w-[calc(100%-2rem)] sm:w-[540px] transition-all duration-300 ease-in-out origin-top-left ${
             isMapOpen
               ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto visible shadow-2xl'
               : 'opacity-0 -translate-y-3 scale-95 pointer-events-none invisible'

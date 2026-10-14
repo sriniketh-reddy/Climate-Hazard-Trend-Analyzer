@@ -80,7 +80,6 @@ Climate Hazard Trend Analyzer/
 │   │   ├── main.py                 # FastAPI application, CORS & lifespan hooks
 │   │   ├── config.py               # Pydantic Settings & environment variables
 │   │   ├── database.py             # PyMongo connection & collection indexing
-│   │   ├── seed.py                 # Automated DB collection creation & preset seeding
 │   │   ├── models/
 │   │   │   └── schemas.py          # Request & Response Pydantic models
 │   │   ├── routers/

@@ -154,7 +154,7 @@ export const AppleDateRangePicker: React.FC<AppleDateRangePickerProps> = ({
   };
 
   return (
-    <div className="relative font-sans" ref={containerRef}>
+    <div className="relative font-sans z-50" ref={containerRef}>
       {/* Apple Pill Trigger Button */}
       <div className="flex items-center gap-1.5 p-1 rounded-full bg-[#1c1c1e]/90 backdrop-blur-2xl border border-white/10 shadow-inner shrink-0">
         <div className="pl-2.5 pr-1 text-[#86868b] flex items-center">
@@ -227,7 +227,7 @@ export const AppleDateRangePicker: React.FC<AppleDateRangePickerProps> = ({
             size="sm"
           />
 
-          <div className="text-xs font-mono text-[#86868b] pl-2 truncate font-medium">
+          <div className="text-xs font-mono text-[#2997ff] bg-white/[0.06] border border-white/10 px-2.5 py-1 rounded-lg truncate font-semibold">
             {activeTarget === 'start' ? formatMonthLabel(startDate) : formatMonthLabel(endDate)}
           </div>
         </div>

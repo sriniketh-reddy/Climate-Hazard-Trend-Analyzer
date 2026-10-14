@@ -52,7 +52,7 @@ export const AppleLocationSelect: React.FC<AppleLocationSelectProps> = ({
   );
 
   return (
-    <div ref={containerRef} className="relative shrink-0">
+    <div ref={containerRef} className="relative shrink-0 z-50">
       {/* Apple Pill Trigger Button */}
       <button
         type="button"

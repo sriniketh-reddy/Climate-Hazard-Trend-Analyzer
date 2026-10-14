@@ -62,6 +62,11 @@ export const ConfigurationBar: React.FC<ConfigurationBarProps> = ({
 
   const isCircling = !hasData && !loading;
 
+  const isMac = useMemo(
+    () => typeof navigator !== 'undefined' && /Mac|iPod|iPhone|iPad/.test(navigator.platform),
+    []
+  );
+
   return (
     <div className="w-full bg-[#0d0d0f] px-4 sm:px-8 py-3 transition-all font-sans">
       <div className="w-full flex flex-wrap items-center justify-between gap-3">
@@ -107,11 +112,9 @@ export const ConfigurationBar: React.FC<ConfigurationBarProps> = ({
         {/* Right Section: Apple Glass Action Button with Circling Fade Beam */}
         <div className="shrink-0 flex items-center">
           <div className="circling-beam-wrapper group">
-            {/* Ambient Circling Glow (active only when analysis tab is empty and not loading) */}
+            {/* Ambient Soft Glow (active only when analysis tab is empty and not loading) */}
             {isCircling && (
-              <div className="circling-beam-ambient" aria-hidden="true">
-                <div className="circling-beam-spinner" />
-              </div>
+              <div className="circling-beam-ambient" aria-hidden="true" />
             )}
 
             {/* Circling Border Beam Track (or crisp static glass border when analysis data is present) */}
@@ -152,7 +155,7 @@ export const ConfigurationBar: React.FC<ConfigurationBarProps> = ({
                   <Play className="w-4 h-4 fill-current text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]" />
                   <span className="drop-shadow-[0_1px_2px_rgba(0,0,0,0.4)]">Run Analysis</span>
                   <span className="text-[11px] px-1.5 py-0.5 rounded-md bg-white/20 border border-white/25 text-white/90 font-mono hidden sm:inline shadow-inner tracking-wide">
-                    ⌘↵
+                    {isMac ? '⌘↵' : 'Ctrl↵'}
                   </span>
                 </>
               )}
